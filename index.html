@@ -1,0 +1,67 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/segmentit@2.0.3/dist/umd/segmentit.js"></script>
+    <title>reading test</title>
+</head>
+
+<body>
+    <div>
+        <p id="textdisplay"></p>
+    </div>
+    <div>
+
+        <input type="text" id="txt">
+        <div>
+            <label for="gap">gap:</label>
+            <input type="number" name="gap" id="gap" value="3">
+        </div>
+        <div>
+            <label for="shift">shift:</label>
+            <input type="number" name="shift" id="shift" value="0">
+        </div>
+        <button id="btnUpdate">update</button>
+    </div>
+</body>
+
+<script>
+    const segmentit = Segmentit.useDefault(new Segmentit.Segment());
+    const text = document.getElementById("txt");
+    const textdisplay = document.getElementById("textdisplay");
+    const btnUpdate = document.getElementById("btnUpdate");
+    const gap = document.getElementById("gap");
+    const shift = document.getElementById("shift");
+    const fn = function (event) {
+        textdisplay.innerHTML = text.value;
+        var segment = segmentit.doSegment(text.value);
+        console.log(segment);
+        textdisplay.innerHTML = segment.map(({ w, p }, idx) => {
+            return (idx + parseInt(shift.value)) % parseInt(gap.value) == 0 ?
+                ![0, 1, 0x00000010, 0x00000800, 0x400000].some(x => x == p) ?
+                    w.bold() : w : w;
+        }).join("");
+    }
+    btnUpdate.addEventListener("click", fn);
+    text.addEventListener("change", fn);
+</script>
+
+<style>
+    b {
+        font-weight: bolder;
+        color: black;
+    }
+
+    body {
+        color: #555;
+        background-color: #eee;
+        font-size: x-large;
+        margin: auto;
+        width: 75%;
+        margin-top: 2em;
+    }
+</style>
+
+</html>
